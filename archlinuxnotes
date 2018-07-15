@@ -1,0 +1,33 @@
+*** ISO ***
+1.  Download ISO
+2.  Use Rufus (on windows) to burn the ISO to USB
+
+*** Verify Boot Mode ***
+1.  Run "ls /sys/firmware/efi/efivars"
+2.  If there is no output, your computer is using BIOS and later you'll use MBR for boot.  All of mine have been MBR so far (7/15/2018)
+
+
+*** Connect to the Internet ***
+1.  Installation image enables dhcpcd for wired devices on boot.  You'll have to do this on your own once you install!!!
+2.  ping archlinux.org, 8.8.8.8, and/or jeff-hammond.com
+
+*** Update System Clock ***
+1.  timedatectl set-ntp true
+2.  Check service status with "timedatectl status"
+
+
+*** Partition the Disk(s) ***
+1.  use "fdisk -l" or "lsblk" to view disks.  Results ending in rom, loop or airoot may be ignored.
+  a.  Note: One partition is required for the root directory.  This may be your only partition.
+2.  My devices will use MBR (Master Boot Record) because I have a BIOS motherboard.
+3.  "fdisk /dev/sda" or generically "fdisk /dev/sdX"
+4.  
+
+
+
+
+Network (Wired Connection) troubleshooting:
+
+where "eth0" is the name of device/connection found on running "ip link"
+systemctl enable dhcpcd@eth0.service
+systemctl start dhcpcd@eth0.service
