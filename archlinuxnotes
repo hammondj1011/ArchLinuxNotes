@@ -21,13 +21,57 @@
   a.  Note: One partition is required for the root directory.  This may be your only partition.
 2.  My devices will use MBR (Master Boot Record) because I have a BIOS motherboard.
 3.  "fdisk /dev/sda" or generically "fdisk /dev/sdX"
-4.  
+4.  Be sure to delete all partitions before creating a new one.
+  a.  If you create a new one and you're not asked "primary/extended", your old partition isn't deleted
+  b.  Type should end up being...83? for Linux
+5.  Be sure to make the file system--"mkfs.ext4 /dev/sda1" 
+
+*** Mount File System ***
+1.  "mount /dev/sda1 /mnt"
+2.  "pacstrap /mnt base" and any other packages desired after "base"
 
 
+*** Generate fstab File ***
+1.  "genfstab -U /mnt >> /mnt/etc/fstab"
+  a.  The fstab(5) file can be used to define how disk partitions, various other block devices, or remote filesystems should be mounted into the filesystem. 
 
+****** Change Root into the New System ******
+1.  "arch-chroot /mnt"
 
-Network (Wired Connection) troubleshooting:
+*** Time Zone ***
+1.  ln -sf /usr/share/zoneinfo/Americas/Chicago /etc/localtime
+2.  "hwclock --systohc"
 
+*** Network Config ***
+1.  Create hostname file
+  a.  /etc/hostname
+    i.  myhostname
+2.  /etc/hosts
+  a.  127.0.0.1 localhost
+  b.  ::1 localhost
+  c.  127.0.1.1 myhostname.localdomain myhostname
+  
+*** Network (Wired Connection) troubleshooting ***
 where "eth0" is the name of device/connection found on running "ip link"
 systemctl enable dhcpcd@eth0.service
 systemctl start dhcpcd@eth0.service
+
+*** Set Root Password ***
+1.  "passwd"
+
+*** Boot Loader ***
+NOTE: I use GRUB.  These instructions detail that
+1.  If you have intel PC, run "Pacman -S intel-ucode"
+2.  Run "grub-install --target=i386-pc /dev/sda"
+  i.  My PC is X86_64, but the i386-pc will recognize this and load the 64-big correctly
+3.  *** Try to edit the /etc/default/grub file and change GRUB_TIMEOUT=5 to GRUB_TIMEOUT=0.  This prevents annoying load screen
+4.  Run "grub-mkconfig -o /boot/grub/grub.cfg".  If step 3 wasn't possible, run grub-mkconfig, set values, then run it again.
+
+type "exit"
+****** Exit Change Root ******
+
+Enter in "umount -R /mnt" to umount
+
+type "reboot"
+
+
