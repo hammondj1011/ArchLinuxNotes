@@ -28,7 +28,12 @@
 
 *** Mount File System ***
 1.  "mount /dev/sda1 /mnt"
-2.  "pacstrap /mnt base" and any other packages desired after "base".  I recommend "grub" and "vim" to complete the rest of the setup.
+2.  "pacstrap /mnt base" and any other packages desired after "base".
+  a.  Recommend:
+    i. grub
+    ii. vim
+    iii. dialog
+    iv. wpa-supplicant 
 
 
 *** Generate fstab File ***
