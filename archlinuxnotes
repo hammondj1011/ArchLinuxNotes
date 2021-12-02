@@ -1,6 +1,8 @@
 *** ISO ***
 1.  Download ISO
 2.  Use Rufus (on windows) to burn the ISO to USB
+3. NOTE: I tried to do the install with an old version of arch linux on my drive from 2018. This did not work! I had to redownload the iso and then do the install
+4. NOTE: I had to use rufus; when I tried this on mac, I couldn't get the image to burn. This is most likely due to operator error on my part.
 
 *** Verify Boot Mode ***
 1.  Run "ls /sys/firmware/efi/efivars"
@@ -8,7 +10,7 @@
 
 
 *** Connect to the Internet ***
-1.  Installation image enables dhcpcd for wired devices on boot.  You'll have to do this on your own once you install!!!
+1.  Installation image enables dhcpcd for wired devices on boot.  
 2.  ping archlinux.org, 8.8.8.8, and/or jeff-hammond.com
 
 *** Update System Clock ***
@@ -21,10 +23,12 @@
   a.  Note: One partition is required for the root directory.  This may be your only partition.
 2.  My devices will use MBR (Master Boot Record) because I have a BIOS motherboard.
 3.  "fdisk /dev/sda" or generically "fdisk /dev/sdX"
-4.  Be sure to delete all partitions before creating a new one.
+4.  You can use a currently existing partition and just reformat, but it's recommended to delete all partitions and start over.
   a.  If you create a new one and you're not asked "primary/extended", your old partition isn't deleted
   b.  Type should end up being...83? for Linux
-5.  Be sure to make the file system--"mkfs.ext4 /dev/sda1" 
+5.  Be sure to make the file system--"mkfs.ext4 /dev/sda1".
+
+NOTE: keep the boot flag in mind--if it's not set on your partition that will house linux, the boot may not work.
 
 *** Mount File System ***
 1.  "mount /dev/sda1 /mnt"
@@ -33,7 +37,10 @@
     i. grub
     ii. vim
     iii. dialog
-    iv. wpa-supplicant 
+    iv. netctl
+    v. linux
+    vi. linux-firmware
+    vii. dhcpcd (needed for wired connection)
 
 
 *** Generate fstab File ***
@@ -78,5 +85,15 @@ type "exit"
 Enter in "umount -R /mnt" to umount
 
 type "reboot"
+
+
+
+**** POST INSTALL ****
+
+*** Add a User ***
+1. sudo useradd -m username -g users -G wheel
+2. sudo passwd username
+NOTE: ensure sudo is installed
+
 
 
